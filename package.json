@@ -25,6 +25,7 @@
   "dependencies": {
     "@types/bcrypt": "^5.0.0",
     "@types/hapi__joi": "^17.1.8",
+    "@types/jsonwebtoken": "^8.5.9",
     "@types/pg": "^8.6.5",
     "bcrypt": "^5.1.0",
     "cors": "^2.8.5",
