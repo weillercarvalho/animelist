@@ -1,5 +1,5 @@
 export type SignInProtocol = {
-    userId: number,
+    userId?: number,
     email: string,
     password: string
 }

@@ -7,6 +7,7 @@ import { STATUS_CODE } from './enums/statusCode.js';
 import {SignUpProtocol} from './protocols/signUp.js'
 import {SignInProtocol} from './protocols/signIn.js'
 import bcrypt from 'bcrypt';
+import { QueryResult } from 'pg';
 
 dotenv.config();
 
@@ -39,11 +40,28 @@ const signupSchema = Joi.object({
     .required(),
 }) 
 
+const signInSchema = Joi.object({
+    email: Joi
+    .string()
+    .email({ minDomainSegments: 2, tlds: { allow: ["com", "net", "br"] } })
+    .empty(" ")
+    .min(6)
+    .max(40)
+    .required(),
+  password: Joi
+    .string()
+    .empty(" ")
+    .min(6)
+    .max(100)
+    .pattern(new RegExp("^[a-zA-Z0-9]{3,30}$"))
+    .required(),
+})
+
 server.post(`/signup`, async (req: Request,res: Response) => {
     const {name, email, password, confirmPassword}: SignUpProtocol = req.body;
-    const validation = signupSchema.validate(req.body, {abortEarly : false})
+    const validation: Joi.ValidationResult = signupSchema.validate(req.body, {abortEarly : false})
     if (validation.error) {
-        const messageError = validation.error.details.map(v => v.message);
+        const messageError: string[] = validation.error.details.map(v => v.message);
         return res.status(STATUS_CODE.UNPROCESSABLE).send(messageError)
     }
     if (!name || !email || !password || !confirmPassword) {
@@ -59,7 +77,7 @@ server.post(`/signup`, async (req: Request,res: Response) => {
         if (findEmail.rows.length > 0) {
             return res.sendStatus(STATUS_CODE.CONFLICT);
         }
-        const query = connection.query(`INSERT INTO users (name,email,password) VALUES ($1,$2,$3)`,[name,email,hashing]);
+        const query = await connection.query(`INSERT INTO users (name,email,password) VALUES ($1,$2,$3)`,[name,email,hashing]);
         return res.sendStatus(STATUS_CODE.CREATED);
     } catch (error) {
         return res.status(STATUS_CODE.SERVER_ERROR).send(error.message)
@@ -67,7 +85,29 @@ server.post(`/signup`, async (req: Request,res: Response) => {
 })
 
 server.post(`/signin`, async (req: Request,res: Response) => {
-    return res.send(`Ok`)
+    const {email, password}: SignInProtocol = req.body;
+    if (!email || !password) {
+        return res.sendStatus(STATUS_CODE.UNAUTHORIZED);
+    }
+    const validation: Joi.ValidationResult = signInSchema.validate(req.body,{abortEarly: false});
+    if (validation.error) {
+        const messageError: string[] = validation.error.details.map(v => v.message);
+        return res.status(STATUS_CODE.UNPROCESSABLE).send(messageError)
+    }
+    try {
+        const gettingEmail =await connection.query(`SELECT * FROM users WHERE email = $1`,[email]);
+        const getpass: string = (gettingEmail).rows[0].password;
+        const getemail: string = (gettingEmail).rows[0].email;
+        const getuserId: string = (gettingEmail).rows[0].id;
+        const confirmHashing: boolean = bcrypt.compareSync(password,getpass);
+        if (!confirmHashing) {
+            return res.sendStatus(STATUS_CODE.UNAUTHORIZED);
+        }
+        const query = await connection.query(`INSERT INTO sessions ("userId",email,password) VALUES ($1,$2,$3)`,[getuserId,getemail,getpass]);
+        return res.sendStatus(STATUS_CODE.CREATED);
+    } catch (error) {
+        return res.status(STATUS_CODE.SERVER_ERROR).send(error.message);
+    }
 })
 
 server.get(`/animeslist`, async (req: Request, res: Response) => {
