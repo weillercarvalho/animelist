@@ -129,8 +129,8 @@ server.post(`/signin`, async (req: Request, res: Response) => {
   }
 });
 
-server.get(`/animeslist`, async (req: Request, res: Response) => {
-    const {authorization} = req.headers;
+server.get(`/animelist`, async (req: Request, res: Response) => {
+    const authorization = req.headers.authorization as string;
     const token :string = authorization?.replace(`Bearer `,``)
     if (!token) {
         return res.sendStatus(STATUS_CODE.UNAUTHORIZED);
@@ -149,14 +149,32 @@ server.get(`/animeslist`, async (req: Request, res: Response) => {
   }
 });
 
-server.post(`/animeslist`, async (req: Request, res: Response) => {
+server.get(`/animelist/rate/:id`, async (req: Request, res: Response) => {
+  const id = req.params.id as string;
+  const authorization = req.headers.authorization as string;
+  const token :string = authorization?.replace(`Bearer `,``)
+  if (!token) {
+      return res.sendStatus(STATUS_CODE.UNAUTHORIZED);
+  }
+  const integerId = parseInt(id,10);
+  if (isNaN(integerId)) {
+    return res.sendStatus(STATUS_CODE.UNAUTHORIZED);
+  }
+  try {
+    const query: QueryResult<Animes> = await connection.query(`SELECT SUM(animes.rate) AS "totalRate",name FROM animes WHERE "userId" = $1 GROUP BY id;`,[integerId]);
+    return res.send(query.rows)
+  } catch (error) {
+    return res.status(STATUS_CODE.SERVER_ERROR).send(error.message);
+  }
+})
+
+server.post(`/animelist`, async (req: Request, res: Response) => {
     const authorization = req.headers.authorization as string;
     const token :string = authorization?.replace(`Bearer `,``)
     if (!token) {
         return res.sendStatus(STATUS_CODE.UNAUTHORIZED);
     }
   const { name, review, image, rate }: AnimelistProtocol  = req.body;
-  console.log(name,review,image,rate)
   if (!name || !review || !image || !rate) {
     return res.sendStatus(STATUS_CODE.UNAUTHORIZED);
   }
@@ -169,7 +187,7 @@ server.post(`/animeslist`, async (req: Request, res: Response) => {
     }
     const getuserId: number = gettingSession.rows[0].userId;
     const getsessionId: number = gettingSession.rows[0].id;
-    const query: QueryResult<Animes> = await connection.query(`INSERT INTO animes ("userId", "sessionId", "name", "review", "image", "rate", "token") VALUES ($1,$2,$3,$4,$5,$6,$7)`,[getuserId, getsessionId, name, review, image, rate, gettoken]);
+    const query: QueryResult<Animes> = await connection.query(`INSERT INTO animes ("userId", "sessionId", "name", "review", "image", "rate", "token") VALUES ($1,$2,$3,$4,$5,$6,$7);`,[getuserId, getsessionId, name, review, image, rate, gettoken]);
     return res.sendStatus(STATUS_CODE.CREATED);
   } catch (error) {
     return res.status(STATUS_CODE.SERVER_ERROR).send(error.message);
@@ -177,15 +195,45 @@ server.post(`/animeslist`, async (req: Request, res: Response) => {
 });
 
 
-server.put(`/animelist/:id`, async (req: Request, res: Response) => {
-  const id = req.params.id as string;
-  
-  return res.send(`Atualizar lista de animes`);
+server.put(`/animelist/:id/:userId`, async (req: Request, res: Response) => {
+  const { name, review, image, rate }: AnimelistProtocol  = req.body;
+  const idparams = req.params.id as string;
+  const userIdparams = req.params.userId as string;
+  const authorization = req.headers.authorization as string;
+  const token :string = authorization?.replace(`Bearer `,``);
+  const integerId = parseInt(idparams,10);
+  const integeruserId = parseInt(userIdparams,10);
+  if (!token || !idparams || !name || !review || !image || !rate || !userIdparams) {
+      return res.sendStatus(STATUS_CODE.UNAUTHORIZED);
+  }
+  if (isNaN(integerId)) {
+    return res.sendStatus(STATUS_CODE.UNAUTHORIZED);
+  }
+  try {
+    const query : QueryResult<Animes> = await connection.query(`UPDATE animes SET "name" = $1, "review" = $2, "image" = $3, "rate" = $4 WHERE id = $5 AND "userId" = $6;`,[name,review,image,rate,integerId,integeruserId]);
+    return res.sendStatus(STATUS_CODE.CREATED);
+  } catch (error) {
+    return res.status(STATUS_CODE.SERVER_ERROR).send(error.message);
+  }
 });
 
 server.delete(`/animelist/:id`, async (req: Request, res: Response) => {
   const id = req.params.id as string;
-  return res.send(`Deletar lista de animes.`);
+  const authorization = req.headers.authorization as string;
+  const token :string = authorization?.replace(`Bearer `,``);
+  if (!token) {
+    return res.sendStatus(STATUS_CODE.UNAUTHORIZED);
+  }
+  const integerId = parseInt(id,10);
+  if (isNaN(integerId)) {
+    return res.sendStatus(STATUS_CODE.UNAUTHORIZED);
+  }
+  try {
+    const query: QueryResult<Animes> = await connection.query(`DELETE FROM animes WHERE id = $1;`,[id]);
+    return res.sendStatus(STATUS_CODE.CREATED);
+  } catch (error) {
+    return res.status(STATUS_CODE.SERVER_ERROR).send(error.message);
+  }
 });
 
 server.listen(process.env.PORT, () => {
