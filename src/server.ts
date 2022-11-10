@@ -6,8 +6,7 @@ import { connection } from "./database/db.js";
 import { STATUS_CODE } from "./enums/statusCode.js";
 import { SignUpProtocol, Users } from "./protocols/signUp.js";
 import { SignInProtocol, Sessions } from "./protocols/signIn.js";
-import { Animes } from "./protocols/anime.js";
-import { AnimelistProtocol } from "./protocols/list.js";
+import { AnimelistProtocol, Animes } from "./protocols/list.js";
 import bcrypt from "bcrypt";
 import { JWT } from './services/jwt.js'
 import {QueryResult} from 'pg';
