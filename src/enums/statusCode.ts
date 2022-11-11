@@ -1,6 +1,6 @@
-import {statusCode} from '../protocols/status'
+import { statusCode } from "../protocols/status";
 
-const STATUS_CODE : statusCode = Object.freeze({
+const STATUS_CODE: statusCode = Object.freeze({
   OK: 200,
   CREATED: 201,
   NO_CONTENT: 204,
