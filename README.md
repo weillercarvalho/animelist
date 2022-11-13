@@ -11,6 +11,7 @@ A backend project focused in the creation of a API with main function creating r
 
    <br />
    <br />
+   <a href='https://app.swaggerhub.com/apis-docs/weillercarvalho/animelist/1.0.0' target='_blank' noreferrer>View Documentation</a>
    <br />
  </p>
 
