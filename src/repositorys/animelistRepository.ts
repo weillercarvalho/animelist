@@ -1,6 +1,5 @@
 import { connection } from "../database/db.js";
 import { QueryResult } from "pg";
-import { Users } from "../protocols/signUp.js";
 import { Sessions } from "../protocols/signIn.js";
 import { Animes } from "../protocols/list.js";
 

@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import { nextTick } from "process";
 import { STATUS_CODE } from "../enums/statusCode.js";
 import { AnimelistProtocol } from "../protocols/list.js";
 function getAllListValidation(req: Request, res: Response, next: NextFunction) {
