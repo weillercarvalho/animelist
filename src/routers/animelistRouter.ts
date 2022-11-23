@@ -5,14 +5,14 @@ import {
   postAnimelistValidation,
   updateAnimelistValidation,
   deleteAnimelistValidation,
-} from "../middlewares/animelistValidation.js";
+} from "../middlewares/animelistValidation";
 import {
   getAllLists,
   getSomeLists,
   postAnimelist,
   updateAnimelist,
   deleteAnimelist,
-} from "../controllers/animelistController.js";
+} from "../controllers/animelistController";
 
 const animeRouter = express.Router();
 

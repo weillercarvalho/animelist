@@ -1,10 +1,10 @@
 import { NextFunction, Request, Response } from "express";
-import { STATUS_CODE } from "../enums/statusCode.js";
-import { SignUpProtocol } from "../protocols/signUp.js";
-import { SignInProtocol } from "../protocols/signIn.js";
+import { STATUS_CODE } from "../enums/statusCode";
+import { SignUpProtocol } from "../protocols/signUp";
+import { SignInProtocol } from "../protocols/signIn";
 import Joi from "joi";
-import { signupSchema } from "../schemas/signUpSchema.js";
-import { signInSchema } from "../schemas/signInSchema.js";
+import { signupSchema } from "../schemas/signUpSchema";
+import { signInSchema } from "../schemas/signInSchema";
 function signUpValidation(req: Request, res: Response, next: NextFunction) {
   const { name, email, password, confirmPassword } = req.body as SignUpProtocol;
   const validation: Joi.ValidationResult = signupSchema.validate(req.body, {

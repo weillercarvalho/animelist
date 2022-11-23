@@ -1,7 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
-import { authRouter } from "./routers/authRouter.js";
-import { animeRouter } from "./routers/animelistRouter.js";
+import { authRouter } from "./routers/authRouter";
+import { animeRouter } from "./routers/animelistRouter";
 
 dotenv.config();
 
@@ -13,3 +13,5 @@ server.use(animeRouter);
 server.listen(process.env.PORT, () => {
   console.log(`Listening on the ${process.env.PORT} port`);
 });
+
+export default server;

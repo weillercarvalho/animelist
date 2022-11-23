@@ -1,14 +1,14 @@
 import { Request, Response } from "express";
-import { STATUS_CODE } from "../enums/statusCode.js";
-import { SignUpProtocol } from "../protocols/signUp.js";
-import { SignInProtocol } from "../protocols/signIn.js";
+import { STATUS_CODE } from "../enums/statusCode";
+import { SignUpProtocol } from "../protocols/signUp";
+import { SignInProtocol } from "../protocols/signIn";
 import bcrypt from "bcrypt";
 import {
   firstRepository,
   secondRepository,
   thirdRepository,
-} from "../repositorys/authRepository.js";
-import { JWT } from "../services/jwt.js";
+} from "../repositorys/authRepository";
+import { JWT } from "../services/jwt";
 
 async function signUp(req: Request, res: Response) {
   const { name, email, password, confirmPassword } = req.body as SignUpProtocol;

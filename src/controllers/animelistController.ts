@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { STATUS_CODE } from "../enums/statusCode.js";
+import { STATUS_CODE } from "../enums/statusCode";
 import {
   firstRepository,
   secondRepository,
@@ -8,8 +8,8 @@ import {
   fifthRepository,
   sixthRepository,
   seventhRepository,
-} from "../repositorys/animelistRepository.js";
-import { AnimelistProtocol } from "../protocols/list.js";
+} from "../repositorys/animelistRepository";
+import { AnimelistProtocol } from "../protocols/list";
 
 async function getAllLists(req: Request, res: Response) {
   const authorization = req.headers.authorization as string;

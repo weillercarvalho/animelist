@@ -1,7 +1,7 @@
-import { connection } from "../database/db.js";
+import { connection } from "../database/db";
 import { QueryResult } from "pg";
-import { Users } from "../protocols/signUp.js";
-import { Sessions } from "../protocols/signIn.js";
+import { Users } from "../protocols/signUp";
+import { Sessions } from "../protocols/signIn";
 async function firstRepository(email: string): Promise<QueryResult<Users>> {
   const findEmail = await connection.query(
     `SELECT * FROM users WHERE email = $1;`,

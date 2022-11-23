@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import { STATUS_CODE } from "../enums/statusCode.js";
-import { AnimelistProtocol } from "../protocols/list.js";
+import { STATUS_CODE } from "../enums/statusCode";
+import { AnimelistProtocol } from "../protocols/list";
 function getAllListValidation(req: Request, res: Response, next: NextFunction) {
   const authorization = req.headers.authorization as string;
   const token: string = authorization?.replace(`Bearer `, ``);

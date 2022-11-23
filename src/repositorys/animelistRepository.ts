@@ -1,7 +1,7 @@
-import { connection } from "../database/db.js";
+import { connection } from "../database/db";
 import { QueryResult } from "pg";
-import { Sessions } from "../protocols/signIn.js";
-import { Animes } from "../protocols/list.js";
+import { Sessions } from "../protocols/signIn";
+import { Animes } from "../protocols/list";
 
 async function firstRepository(): Promise<QueryResult<Sessions>> {
   const gettingdateSection = await connection.query(
