@@ -1,6 +1,6 @@
 # Animelist BackEnd
 
-A backend project focused in the creation of a API with main function creating reviews and give rates about watched animes.The back-end is based on the creation of a basic API using express, PostgreSQL as a SQL database, BCrypt for hashing and some others libs as joi for validation and in the arquitecture part were used routers, controllers, middlewares, enums, protocols and repository patterns.
+A backend project focused in the creation of a API with main function creating reviews and give rates about watched animes.The back-end is based on the creation of a basic API using express, PostgreSQL as a SQL database, BCrypt for hashing, artillery for load test and some others libs as joi for validation and in the arquitecture part were used routers, controllers, middlewares, enums, protocols and repository patterns.
 
 
 ![Captura de tela de 2022-11-11 00-39-46](https://user-images.githubusercontent.com/99501431/201258526-c4f1c702-d16c-4bac-8713-dde953fbb3db.png)
@@ -17,7 +17,7 @@ A backend project focused in the creation of a API with main function creating r
 
 ## About
 
-This is an web application based in create and consume a simple api using different technologies as Typescript as main lang, Javascript ,NodeJS, Expressjs, PostgreSQL, Joi, Bcrypt, JWT etc.
+This is an web application based in create and consume a simple api using different technologies as Typescript as main lang, Javascript ,NodeJS, Expressjs, PostgreSQL, Joi, Bcrypt, JWT, artillery etc.
 
 ## Technologies
 <p>
