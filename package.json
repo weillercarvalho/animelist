@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --watchAll"
   },
   "keywords": [
     "NodeJS",
@@ -16,6 +16,7 @@
   "author": "Weiller Carvalho",
   "license": "ISC",
   "devDependencies": {
+    "@faker-js/faker": "^7.6.0",
     "@types/bcrypt": "^5.0.0",
     "@types/express": "^4.17.14",
     "@types/hapi__joi": "^17.1.8",
